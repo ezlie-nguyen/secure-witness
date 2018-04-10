@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block center_content %}
+{% load staticfiles %}
+<link href="{% static secure_witness/layout.css' %}" rel="stylesheet" type="text/css"/>
+
+<title>My Files</title>
+
+{% if logged_in %}
+<h2>{{bulletin.name}}</h2>
+<h3>Files</h3>
+
+{% if files|length == 0 %}
+<h4>No files inside of this bulletin!</h4>
+<br><br>
+
+{% if logged_in and bulletin.author == user %}
+<a class="btn btn-primary" href="{% url 'new_file' %}">
+
+<p><a href="{% url 'new_file' %}">Upload new file</a></p>
+{% if files|length > 0 %}
+<ul>
+{% for file in files %}
+<li><a href="{% url 'get_file' file.pk %}">{{ file.name }}</a></li>
+{% endfor %}
+</ul>
+{% else %}
+<p>You have not uploaded any files!</p>
+{% endif %}
+{% endblock %}

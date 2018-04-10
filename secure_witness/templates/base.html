@@ -1,0 +1,100 @@
+<head>
+	{% load staticfiles %}
+
+	<!-- Bootstrap core CSS -->
+	<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+	<link rel="stylesheet" type="text/css" href="{% static 'secure_witness/navbar-fixed-top.css' %}" />
+
+	  {% if user.is_authenticated %}
+	  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	    <div class="container-fluid">
+	      
+	      <!-- Brand and toggle get grouped for better mobile display -->
+	      <div class="navbar-header">
+		<p class="navbar-text">Welcome, {{user.username}}</p>
+	      </div>
+	      
+	      <!-- Collect the nav links, forms, and other content for toggling -->
+	      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		<ul class="nav navbar-nav">
+		  <li class="active"><a href="{% url 'home' %}">Home <span class="sr-only">(current)</span></a></li>
+		</ul>
+		<form class="navbar-form navbar-left" role="search">
+		  <a class="btn btn-success" aria-label="Left-Align" href="{% url 'search_bulletins' %}">Search
+		      <span class="glyphicon glyphicon-search" aria-hidden="true"></span></a>
+		</form>
+		<ul class="nav navbar-nav navbar-right">
+		  {% if user.is_superuser %}
+		  <a class="btn btn-success" aria-label="Left-Align" href="{% url 'admin:index' %}">Administrator Page
+		    <span class="glyphicon glyphicon-lock" aria-hidden="true"></span></a>
+		  {% endif %}
+		  <a class="btn btn-success navbar-btn" href="{% url 'logout' %}">Log out
+		      <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a>
+		</ul>
+	      </div><!-- /.navbar-collapse -->
+	    </div><!-- /.container-fluid -->
+	  </nav>
+	  {% else %}
+	  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	    <div class="container">
+              <div class="navbar-header">
+		<a class="navbar-brand" href="{% url 'home' %}">SecureWitness</a>
+              </div>
+              <div id="navbar" class="navbar-collapse collapse">
+		<form class="navbar-form navbar-right" role="form" action="{% url 'existing_user' %}" method="post">
+		  {% csrf_token %}
+		  <div class="form-group">
+		    {{form.username}}
+		  </div>
+		  <div class="form-group">
+		    {{form.password}}
+		  </div>
+		  <button type="submit" class="btn btn-success">Sign in
+		      <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+		  </button>
+		</form>
+		<ul class="nav navbar-nav navbar-right">
+		  <li><a href="{% url 'new_user' %}">Create new account</a></li>
+		</ul>
+              </div><!--/.navbar-collapse -->
+	    </div>
+	  </nav>
+	  {% endif %}
+	 
+	  {% if logged_in %}
+	  <div class="container">
+	    <ol class="breadcrumb">
+	      <div class="row">
+		<div class="btn-group btn-breadcrumb">
+		  <a href="{% url 'home' %}" class="btn btn-primary">Home
+		      <span class="glyphicon glyphicon-home" aria-hidden="true"></span></a>
+		  {% if folder_id %}
+		  <a href="{% url 'get_folder' folder_id %}" class="btn btn-info">{{folder.name}}</a>
+		  {% endif %}
+		  {% if bulletin_id %}
+		  <a href="{% url 'get_bulletin' bulletin_id %}" class="btn btn-success">{{bulletin.name}}</a>
+		  {% endif %}
+		  {% if search %}
+		  <a href="{% url 'search_bulletins' %}" class="btn btn-warning">Search</a>
+		  {% endif %}
+		  {% if my_files %}
+		  {% endif %}
+		</div>
+	      </div>
+	    </ol>
+	  </div>
+	  {% endif %}
+
+	  <div class="container">
+	    <!-- Main component for a primary marketing message or call to action -->
+	    <div class="jumbotron">
+            <h1><i>SecureWitness</h1></i>
+	    <h3>A secure file-storage system</h3>
+	  </div>
+	  {% block center_content %}
+	  {% endblock %}
+	  </div>
+</body>
+</html>

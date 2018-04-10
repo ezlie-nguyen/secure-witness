@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block center_content %}
+
+{% load staticfiles %}
+<!-- Custom styles for this template -->
+<link href="{% static 'secure_witness/signin2.css' %}" rel="stylesheet" type="text/css" />
+
+<div class="container">
+
+<div class="row" style="margin-top:20px">
+    <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+		<form role="form" method="post">
+		  {% csrf_token %}
+			<fieldset>
+				<h2>Create a new folder.</h2>
+				<hr class="colorgraph">
+
+				{% if folder_taken %}
+				<div class="alert alert-danger" role="alert">Folder name already exists. Please try again.</div>
+				{% endif %}
+				{% if form.name.errors %}
+				<div class="alert alert-danger" role="alert">The folder name is required. Please try again.</div>
+				{% endif %}		
+
+				<div class="form-group">
+				  <label for="id_name">Folder Name*:</label>
+				  <input class="form-control input-lg" id="id_name" maxlength="128" name="name" type="text" placeholder="New folder" required="required"
+					 {% if form.name.errors or folder_taken %} style="background:#ffdddd;" {% endif %}>
+				</div>
+				<div class="form-group">
+				  <label for="id_location">Location:</label>
+				  {{ form.location }}
+				</div>
+				<div class="form-group">
+				  <label for="id_description">Description:</label>
+				  {{ form.description }}
+				</div>
+				<hr class="colorgraph">
+				<input type="submit" class="btn btn-lg btn-primary btn-block" formaction="{% url 'new_folder' %}" value="Create folder">
+			</fieldset>
+		</form>
+    </div>
+</div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block center_content %}
+
+{% if required_fields_missing %}
+<p><strong>Error: You did not fill out a required field. Please try again.</strong></p>
+{% endif %}
+
+{% if password_incorrect %}
+<p><strong>Error: Your password did not match. Please try again.</strong></p>
+{% endif %}
+
+<form id="id_form" action="{% url 'give_access' file.pk %}" method="post">
+{% csrf_token %}
+<p>Use the following form to select the user(s) to whom you would like to grant
+   access to <strong>{{ file.name }}</strong>. You may select multiple users by
+   holding the CTRL key while selecting.</p>
+<p>{{ form.reader }}</p>
+<p>Please enter your password to confirm your identity.</p>
+<p>Password: {{ form.author_password }}</p>
+<p><a href="#" onclick="javascript:{document.getElementById('id_form').submit();}">Grant access to these users</a></p>
+</form>
+
+{% endblock %}

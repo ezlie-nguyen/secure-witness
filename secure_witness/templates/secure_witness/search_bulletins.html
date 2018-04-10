@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block center_content %}
+<form action="{% url 'search_bulletins' %}" method="post">
+{% csrf_token %}
+<table>
+    <tr>
+        <td>Author's username:</td>
+        <td>{{ form.author_check }}</td>
+        <td>{{ form.author_username }}</td>
+    </tr>
+    <tr>
+        <td>Name of bulletin:</td>
+        <td>{{ form.bulletin_check }}</td>
+        <td>{{ form.bulletin_name }}</td>
+    </tr>
+    <tr>
+        <td>Location:</td>
+        <td>{{ form.location_check }}</td>
+        <td>{{ form.location }}</td>
+    </tr>
+    <tr>
+        <td>Description:</td>
+        <td>{{ form.description_check }}</td>
+        <td>{{ form.description }}</td>
+    </tr>
+    <tr>
+        <td>Created after:</td>
+        <td colspan="2">
+            <table>
+                <tr>
+                    <td>{{ form.created_after_year }}</td>
+                    <td>{{ form.created_after_month }}</td>
+                    <td>{{ form.created_after_day }}</td>
+                    <td>{{ form.created_after_hour }}</td>
+                    <td>{{ form.created_after_minute }}</td>
+                    <td>{{ form.created_after_second }}</td>
+                </tr>
+                <tr>
+                    <td>YYYY</td>
+                    <td>MM</td>
+                    <td>DD</td>
+                    <td>HH</td>
+                    <td>MM</td>
+                    <td>SS</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>Created before:</td>
+        <td colspan="2">
+            <table>
+                <tr>
+                    <td>{{ form.created_before_year }}</td>
+                    <td>{{ form.created_before_month }}</td>
+                    <td>{{ form.created_before_day }}</td>
+                    <td>{{ form.created_before_hour }}</td>
+                    <td>{{ form.created_before_minute }}</td>
+                    <td>{{ form.created_before_second }}</td>
+                </tr>
+                <tr>
+                    <td>YYYY</td>
+                    <td>MM</td>
+                    <td>DD</td>
+                    <td>HH</td>
+                    <td>MM</td>
+                    <td>SS</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>Modified after:</td>
+        <td colspan="2">
+            <table>
+                <tr>
+                    <td>{{ form.modified_after_year }}</td>
+                    <td>{{ form.modified_after_month }}</td>
+                    <td>{{ form.modified_after_day }}</td>
+                    <td>{{ form.modified_after_hour }}</td>
+                    <td>{{ form.modified_after_minute }}</td>
+                    <td>{{ form.modified_after_second }}</td>
+                </tr>
+                <tr>
+                    <td>YYYY</td>
+                    <td>MM</td>
+                    <td>DD</td>
+                    <td>HH</td>
+                    <td>MM</td>
+                    <td>SS</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td>Modified before:</td>
+        <td colspan="2">
+            <table>
+                <tr>
+                    <td>{{ form.modified_before_year }}</td>
+                    <td>{{ form.modified_before_month }}</td>
+                    <td>{{ form.modified_before_day }}</td>
+                    <td>{{ form.modified_before_hour }}</td>
+                    <td>{{ form.modified_before_minute }}</td>
+                    <td>{{ form.modified_before_second }}</td>
+                </tr>
+                <tr>
+                    <td>YYYY</td>
+                    <td>MM</td>
+                    <td>DD</td>
+                    <td>HH</td>
+                    <td>MM</td>
+                    <td>SS</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+<input type="submit" value="Search" />
+</form>
+{% endblock %}

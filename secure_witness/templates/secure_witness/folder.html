@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block center_content %}
+{% load staticfiles %}
+<link href="{% static 'secure_witness/layout.css' %}" rel="stylesheet" type="text/css"/>
+
+<title>{{folder.name}}</title>
+
+{% if logged_in %}
+<div class="page-header">
+     <h2>Folder: {{folder.name}}</h2>
+</div>
+
+<table>
+  <tr>
+    <td><b>Author: </b><i>{{folder.author}}</i></td></tr>
+  <tr>
+    <td><b>Date Created: </b><i>{{folder.date_created}}</i></td></tr>
+  <tr>
+    <td><b>Location: </b>
+      {% if folder.location %}
+      <i>{{folder.location}}</i>
+      {% else %}
+      <i>--</i>
+      {% endif %}</td></tr>
+  <tr>
+    <td><b>Description: </b>
+      {% if folder.description %}
+      <i>{{folder.description}}</i>
+      {% else %}
+      <i>--</i>
+      {% endif %}</td></tr>
+</table>
+
+<br>
+<h3>Bulletins</h3>
+
+<br>
+
+{% if bulletins|length == 0 %}
+<h4>No bulletins inside of this folder!</h4>
+<br><br>
+
+{% if logged_in and folder.author == user %}
+<a class="btn btn-primary" href="{% url 'new_bulletin' folder_id %}">
+  <span class="glyphicon glyphicon-plus"></span>Create new bulletin</a>
+{% endif %}
+{% if folder.author != user %}
+<h4>This folder is read-only.</h4>
+{% endif %}
+
+{% else %}
+{% if logged_in and folder.author == user %}
+<a class="btn btn-primary" href="{% url 'new_bulletin' folder_id %}">
+  <span class="glyphicon glyphicon-plus"></span>Create new bulletin</a>
+{% endif %}
+{% if folder.author != user %}
+<h4>This folder is read-only.</h4>
+{% endif %}
+<br><br>
+
+<div class="container">
+  <div class="row col-md-16 col-md-offset-15 custyle">
+    <table class="table table-striped custab">
+      <thead>
+	<tr>
+	  <th>Name</th>
+	  <th>Location</th>
+	  <th>Description</th>
+	  <th class="text-center">Action</th>
+	<tr>
+      </thead>
+      {% for bulletin in bulletins %}
+      <tr>
+        <td><a href="{% url 'get_bulletin' bulletin.pk %}">{{bulletin.name}}</a></td>
+	{% if bulletin.location %}
+        <td>{{bulletin.location}}</td>
+	{% else %}
+	<td>--</td>
+	{% endif %}
+	{% if bulletin.description %}
+	<td>{{bulletin.description}}</td>
+	{% else %}
+	<td>--</td>
+	{% endif %}
+	{% if logged_in and folder.author == user %}
+	<td class="text-center"><a class="btn btn-info" href="{% url 'edit_bulletin' bulletin.pk %}"><span class="glyphicon glyphicon-edit"></span>Edit</a>
+	  <a href="#" class="btn btn-danger" onclick="javascript:{if(confirm('Are you sure?'))window.location.href='{% url 'delete_bulletin' bulletin.pk %}';}">
+	    <span class="glyphicon glyphicon-remove"></span>Delete</a>
+	  <a href="{% url 'copy_bulletin' bulletin.pk %}" class="btn btn-warning">
+	  <span class="glyphicon glyphicon-share"></span>Copy</a></td>
+	{% else %}
+	<td>Read-only</td>
+	{% endif %}
+      </tr>
+      {% endfor %}
+
+    </table>
+  </div>
+</div>
+
+{% endif %}
+{% endif %}
+
+{% endblock %}

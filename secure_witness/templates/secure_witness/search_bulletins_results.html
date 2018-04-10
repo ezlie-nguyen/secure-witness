@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block center_content %}
+<p>Your search returned <strong>{{ results|length }} result{{ results|length|pluralize }}</strong>.</p>
+{% for bulletin in results %}
+<div class="result">
+<p><span style="font-size:130%;"><strong><a href="{% url 'get_bulletin' bulletin.pk %}">{{ bulletin.name }}</a></strong></span>
+   <em>by {{ bulletin.author.username }}</em><br />
+   <small>{{ bulletin.date_created }}
+   (last modified {{ bulletin.date_modified }})</small></p>
+{% if bulletin.description|length > 0 %}
+<p>{{ bulletin.description }}</p>
+{% else %}
+<p><em>No description.</em></p>
+{% endif %}
+</div>
+{% endfor %}
+{% endblock %}

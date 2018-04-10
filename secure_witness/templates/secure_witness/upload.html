@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block center_content %}
+
+<form action="{% url 'new_file' bulletin.pk %}" method="post" enctype="multipart/form-data">
+{% csrf_token %}
+{% if incorrect_password %}
+<p><strong>Your password was incorrect. Please try again.</strong></p>
+{% endif %}
+<p>Use the following form to select the file you would like to upload.</p>
+<p>{{ form.file }}</p>
+<p>If you would like to encrypt your file, enter your password below. <strong>
+   The file will remain unencrypted if you leave the field blank.</strong></p>
+<p>{{ form.encrypt }}</p>
+<input type="submit" value="Upload" />
+</form>
+
+{% endblock %}

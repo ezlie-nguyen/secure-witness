@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block center_content %}
+{% load staticfiles %}
+<link href="{% static 'secure_witness/layout.css' %}" rel="stylesheet" type="text/css"/>
+
+<title>Bulletin: {{bulletin.name}}</title>
+
+{% if logged_in %}
+<div class="page-header">
+  <h2>{{bulletin.name}}</h2>
+</div>
+
+<table>
+  <tr>
+    <td><b>Author: </b><i>{{bulletin.author}}</i></td></tr>
+  <tr>
+    <td><b>Date Created: </b><i>{{bulletin.date_created}}</i></td></tr>
+  <tr>
+    <td><b>Location: </b>
+      {% if bulletin.location %}
+      <i>{{bulletin.location}}</i>
+      {% else %}
+      <i>--</i>
+      {% endif %}</td></tr>
+  <tr>
+    <td><b>Description: </b>
+      {% if bulletin.description %}
+      <i>{{bulletin.description}}</i>
+      {% else %}
+      <i>--</i>
+      {% endif %}</td></tr>
+</table>
+
+<br>
+<h3>Files</h3>
+<br>
+
+{% if files|length == 0 %}
+<h4>No files inside of this bulletin!</h4>
+<br><br>
+
+{% if logged_in and bulletin.author == user %}
+<a class="btn btn-primary" href="{% url 'new_file' bulletin_id %}">
+  <span class="glyphicon glyphicon-plus"></span>Add a file</a>
+{% endif %}
+{% if bulletin.author != user %}
+<h4>This bulletin is read-only.</h4>
+{% endif %}
+
+{% else %}
+{% if logged_in and bulletin.author == user %}
+<a class="btn btn-primary" href="{% url 'new_file' bulletin_id %}">
+  <span class="glyphicon glyphicon-plus"></span>Add a file</a>
+{% endif %}
+{% if bulletin.author != user %}
+<h4>This bulletin is read-only.</h4>
+{% endif %}
+<br><br>
+
+<div class="container">
+  <div class="row col-md-16 col-md-offset-15 custyle">
+    <table class="table table-striped custab">
+      <thead>
+	<tr>
+	  <th>Name</th>
+	  <th>Author</th>
+	  <th>Date Created</th>
+	  <th>Encrypted?</th>
+	  <th class="text-center">Action</th>
+	</tr>
+      </thead>
+      {% for file in files %}
+      <tr>
+        <td><a href="{% url 'get_file' file.pk %}">{{file.name}}</a></td>
+	<td>{{file.author}}</td>
+	<td>{{file.date_created}}</td>
+	<td>{% if file.rand %}Encrypted{% else %}Not encrypted{% endif %}</td>
+	{% if logged_in and folder.author == user %}
+	<td class="text-center">{% if file.rand %}<a class="btn btn-info" href="{% url 'give_access' file.pk %}"><span class="glyphicon glyphicon-share"></span>Grant access to other users</a>{% endif %}
+	  <a href="#" class="btn btn-danger" onclick="javascript:{if(confirm('Are you sure?'))window.location.href='{% url 'delete_file' file.pk %}';}">
+	    <span class="glyphicon glyphicon-remove"></span>Delete</a></td>
+	{% else %}
+	<td>Read-only</td>
+	{% endif %}
+      </tr>
+      {% endfor %}
+
+    </table>
+  </div>
+</div>
+
+{% endif %}
+{% endif %}
+
+<h3>Comments</h3>
+
+{% for comment in comments %}
+<div class="comment" style="background-color: #eeeeee; padding: 0.5em 1em; margin: 0.5em 0em; border-radius: 1em;">
+<p><span style="font-size:130%;"><strong>{{ comment.user.username }}</a></span>
+   <em>posted:</em><br />
+   <small>{{ comment.date_submitted }}</small></p>
+<p>{{ comment.text }}</p>
+</div>
+{% empty %}
+<p>Be the first one to comment!</p>
+{% endfor %}
+<div class="comment-form">
+<form action="{% url 'post_comment' bulletin_id %}" method="post">
+{% csrf_token %}
+<p>{{ comment_form.text }}</p>
+<p><input type="submit" value="Post" /></p>
+</form>
+</div>
+
+{% endblock %}
